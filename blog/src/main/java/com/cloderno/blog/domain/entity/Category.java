@@ -1,32 +1,37 @@
-package com.cloderno.blog.domain.entities;
+package com.cloderno.blog.domain.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
 
 @Entity
-@Table(name = "tags")
+@Table(name = "categories")
+@NoArgsConstructor
+@AllArgsConstructor
 @Getter
 @Setter
-@AllArgsConstructor
-@NoArgsConstructor
 @Builder
-public class Tag {
+public class Category {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
-    @Column(nullable = false)
+    @Column(nullable = false, unique = true)
     private String name;
+
+    @OneToMany(mappedBy = "category")
+    private List<Post> posts = new ArrayList<>();
 
     @Override
     public boolean equals(Object o) {
         if (o == null || getClass() != o.getClass()) return false;
 
-        Tag tag = (Tag) o;
-        return Objects.equals(id, tag.id) && name.equals(tag.name);
+        Category category = (Category) o;
+        return Objects.equals(id, category.id) && name.equals(category.name);
     }
 
     @Override

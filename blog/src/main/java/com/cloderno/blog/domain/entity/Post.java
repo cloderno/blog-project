@@ -1,12 +1,11 @@
-package com.cloderno.blog.domain.entities;
+package com.cloderno.blog.domain.entity;
 
 import com.cloderno.blog.domain.PostStatus;
 import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDateTime;
-import java.util.Objects;
-import java.util.UUID;
+import java.util.*;
 
 @Entity
 @Table(name = "posts")
@@ -42,6 +41,18 @@ public class Post {
     @ManyToOne(fetch = FetchType.LAZY) // loading post authors only when accessed
     @JoinColumn(name = "author_id", nullable = false)
     private User author;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "category_id", nullable = false)
+    private Category category;
+
+    @ManyToMany
+    @JoinTable(
+            name = "post_tags",
+            joinColumns = @JoinColumn(name = "post_id"),
+            inverseJoinColumns = @JoinColumn(name = "tag_id")
+    )
+    private Set<Tag> tags = new HashSet<>();
 
     @Override
     public boolean equals(Object o) {

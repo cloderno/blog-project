@@ -1,32 +1,37 @@
-package com.cloderno.blog.domain.entities;
+package com.cloderno.blog.domain.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.HashSet;
 import java.util.Objects;
+import java.util.Set;
 import java.util.UUID;
 
 @Entity
-@Table(name = "categories")
-@NoArgsConstructor
-@AllArgsConstructor
+@Table(name = "tags")
 @Getter
 @Setter
+@AllArgsConstructor
+@NoArgsConstructor
 @Builder
-public class Category {
+public class Tag {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
-    @Column(nullable = false, unique = true)
+    @Column(nullable = false)
     private String name;
+
+    @ManyToMany(mappedBy = "tags")
+    private Set<Post> posts = new HashSet<>();
 
     @Override
     public boolean equals(Object o) {
         if (o == null || getClass() != o.getClass()) return false;
 
-        Category category = (Category) o;
-        return Objects.equals(id, category.id) && name.equals(category.name);
+        Tag tag = (Tag) o;
+        return Objects.equals(id, tag.id) && name.equals(tag.name);
     }
 
     @Override

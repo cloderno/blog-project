@@ -1,4 +1,4 @@
-package com.cloderno.blog.domain.entities;
+package com.cloderno.blog.domain.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
