@@ -4,6 +4,8 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 @Entity
@@ -30,25 +32,21 @@ public class User {
     @Column(nullable = false)
     private LocalDateTime createdAt;
 
+    @OneToMany(mappedBy = "author", cascade = CascadeType.ALL, orphanRemoval = true) // goes to Post class and searches for author field | user deleted = posts deleted
+    private List<Post> posts = new ArrayList<>();
+
     // in case to use mapstruct with lombok we define custom methods
     @Override
     public boolean equals(Object o) {
-        if (o == null || getClass() != o.getClass()) return false;
-
-        User user = (User) o;
-        return id.equals(user.id) && email.equals(user.email) && password.equals(user.password) && name.equals(user.name) && createdAt.equals(user.createdAt);
+        if (this == o) return true;
+        if (!(o instanceof User)) return false;
+        return id != null && id.equals(((User) o).id);
     }
 
     @Override
     public int hashCode() {
-        int result = id.hashCode();
-        result = 31 * result + email.hashCode();
-        result = 31 * result + password.hashCode();
-        result = 31 * result + name.hashCode();
-        result = 31 * result + createdAt.hashCode();
-        return result;
+        return getClass().hashCode();
     }
-
     // read about prepersist
     @PrePersist // before entity saved to db
     protected void onCreate() {
