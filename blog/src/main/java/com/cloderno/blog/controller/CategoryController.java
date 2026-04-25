@@ -2,6 +2,7 @@ package com.cloderno.blog.controller;
 
 import com.cloderno.blog.domain.dto.CategoryDTO;
 import com.cloderno.blog.domain.entity.Category;
+import com.cloderno.blog.mapper.CategoryMapper;
 import com.cloderno.blog.service.CategoryService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -15,11 +16,15 @@ import java.util.List;
 @RequestMapping("/api/v1/categories")
 @RequiredArgsConstructor
 public class CategoryController {
-    private final CategoryService categoryService;
+    private final CategoryService service;
+    private final CategoryMapper mapper;
 
     @GetMapping
     public ResponseEntity<List<CategoryDTO>> listCategories() {
-        List<Category> categories = categoryService.listCategories();
-        return categories
+        List<CategoryDTO> categories = service.listCategories()
+                .stream().map(mapper::toDto)
+                .toList();
+
+        return ResponseEntity.ok(categories);
     }
 }

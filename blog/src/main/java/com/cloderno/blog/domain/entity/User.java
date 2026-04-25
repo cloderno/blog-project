@@ -32,6 +32,7 @@ public class User {
     @Column(nullable = false)
     private LocalDateTime createdAt;
 
+    @Builder.Default
     @OneToMany(mappedBy = "author", cascade = CascadeType.ALL, orphanRemoval = true) // goes to Post class and searches for author field | user deleted = posts deleted
     private List<Post> posts = new ArrayList<>();
 
