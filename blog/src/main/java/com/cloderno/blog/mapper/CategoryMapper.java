@@ -2,6 +2,7 @@ package com.cloderno.blog.mapper;
 
 import com.cloderno.blog.domain.PostStatus;
 import com.cloderno.blog.domain.dto.CategoryDTO;
+import com.cloderno.blog.domain.dto.CreateCategoryRequest;
 import com.cloderno.blog.domain.entity.Category;
 import com.cloderno.blog.domain.entity.Post;
 import org.mapstruct.Mapper;
@@ -15,6 +16,8 @@ import java.util.List;
 public interface CategoryMapper {
     @Mapping(target = "postCount", source = "posts", qualifiedByName = "calculatePostCount")
     CategoryDTO toDto(Category category);
+
+    Category toEntity(CreateCategoryRequest createCategoryRequest);
 
     @Named("calculatePostCount")
     default long calculatePostCount(List<Post> posts) {
